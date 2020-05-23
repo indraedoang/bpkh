@@ -17,7 +17,7 @@ public class masterdata {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	
 	private int  id;
-	private int kode_bank;
+	private String kode_bank;
 	private String nama_bank;
 	private String  transdate;
 	private String transtime;
@@ -73,10 +73,11 @@ public class masterdata {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getKode_bank() {
+	
+	public String getKode_bank() {
 		return kode_bank;
 	}
-	public void setKode_bank(int kode_bank) {
+	public void setKode_bank(String kode_bank) {
 		this.kode_bank = kode_bank;
 	}
 	public String getNama_bank() {

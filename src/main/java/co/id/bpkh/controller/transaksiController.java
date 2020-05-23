@@ -52,7 +52,7 @@ public class transaksiController {
 		DateFormat df = new SimpleDateFormat("yy"); // Just the year, with 2 digits
 		String years = df.format(Calendar.getInstance().getTime());
 		
-		 String generate_number = masterdataRepo.no_va();
+		 String generate_number = masterdataRepo.no_va(masterdata.getKode_bank());
 		 int referensi;
 		 int seq;
 		 int Year =  localDateTime.getYear();
