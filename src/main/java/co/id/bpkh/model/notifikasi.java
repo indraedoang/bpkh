@@ -1,17 +1,22 @@
 package co.id.bpkh.model;
 
-public class notifikasi {
+public class notifikasi <T> {
 //	private String no_Va;
 //	private String no_validasi;
 //	private String nama_jamaah;
 	private int status;
 	private String message;
-	private ResultBpkh [] result;
+	private Object result;
 	
-public ResultBpkh[] getResult() {
+	public notifikasi(int status, String message, Object result) {
+        this.status = status;
+        this.message = message;
+        this.result = result;
+    }
+	public Object getResult() {
 		return result;
 	}
-	public void setResult(ResultBpkh[] result) {
+	public void setResult(Object result) {
 		this.result = result;
 	}
 	//	public String getNo_validasi() {
