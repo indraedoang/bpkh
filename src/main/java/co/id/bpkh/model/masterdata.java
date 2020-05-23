@@ -44,7 +44,7 @@ public class masterdata {
 	private String no_va;
 	private String kode_wilayah;
 	private String kode_haji;
-	private int nominal;
+	private String nominal;
 	private String kode_jenis_kelamin;
 	
 	
@@ -55,10 +55,11 @@ public class masterdata {
 	public void setKode_haji(String kode_haji) {
 		this.kode_haji = kode_haji;
 	}
-	public int getNominal() {
+	
+	public String getNominal() {
 		return nominal;
 	}
-	public void setNominal(int nominal) {
+	public void setNominal(String nominal) {
 		this.nominal = nominal;
 	}
 	public String getNo_va() {

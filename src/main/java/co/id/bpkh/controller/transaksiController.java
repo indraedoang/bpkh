@@ -18,12 +18,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import co.id.bpkh.exception.ResourceNotFoundException;
 import co.id.bpkh.model.ResultBpkh;
+import co.id.bpkh.model.bank;
 import co.id.bpkh.model.masterdata;
 import co.id.bpkh.model.notifikasi;
+import co.id.bpkh.model.rjth;
 import co.id.bpkh.model.setoranAwal;
+import co.id.bpkh.repository.bankRepository;
 import co.id.bpkh.repository.masterdataRepository;
+import co.id.bpkh.repository.rjthRepository;
 import co.id.bpkh.repository.setoranAwalRepository;
+
 
 @CrossOrigin(origins="*",maxAge=3600)
 @RestController
@@ -33,18 +39,22 @@ public class transaksiController {
 	setoranAwalRepository setoranAwalRepo;
 	@Autowired 
 	masterdataRepository masterdataRepo;
-	
+	@Autowired
+	rjthRepository rjthRepo;
+	@Autowired
+	bankRepository bankRepo;
 	
 	@GetMapping("/bpkh/datanasabah")
 	public List<masterdata> index1()
 	{
 		return masterdataRepo.findAll();
 	}
-	@PostMapping("/bpkh/datanasabah")
+	@PostMapping("/bpkh/setoranAwal")
 	public notifikasi<ResultBpkh> store(@Valid @RequestBody masterdata masterdata)
 	{
-//		notifikasi message = new notifikasi();
 		ResultBpkh result = new ResultBpkh();
+		bank getbank = new bank();
+	 	rjth DataRjth = new rjth();
 		masterdata.getKode_bank();
 		masterdata.getKode_wilayah();
 		masterdata.getKode_haji();
@@ -57,7 +67,29 @@ public class transaksiController {
 		 int seq;
 		 int Year =  localDateTime.getYear();
 		 int status;
+		 int totalUang;
 		 String pesan;
+		// get data bank 
+		 String idRjth = rjthRepo.findId(masterdata.getKode_bank());
+		 String total = rjthRepo.totalUang(masterdata.getKode_bank());
+		 if(idRjth != null) {
+			 totalUang = Integer.parseInt(total)+Integer.parseInt(masterdata.getNominal());
+			 int idrjth = Integer.parseInt(idRjth);
+			 DataRjth = rjthRepo.findById(idrjth).orElseThrow(() -> new ResourceNotFoundException("id", "id", idrjth));
+			 DataRjth.setTotal(Integer.toString(totalUang));
+		 }else {
+			 totalUang = Integer.parseInt(masterdata.getNominal());
+			 getbank = bankRepo.findByKodeBank(masterdata.getKode_bank());
+			 DataRjth.setKode_bank(getbank.getKode_bank());
+			 DataRjth.setNama_bank(getbank.getNama_bank());
+			 DataRjth.setTotal(Integer.toString(totalUang));
+			 
+		 }
+		
+	 // end
+		 
+		 //int id = rjthRepo.findById(idRjth);
+		 
 		 if(generate_number == null) {
 			 seq = 1;
 		 }else {
@@ -68,25 +100,23 @@ public class transaksiController {
 		 String c = refrensi.format(referensi);
 		 String no_va = masterdata.getKode_bank()+masterdata.getKode_wilayah()+years+masterdata.getKode_haji()+masterdata.getKode_jenis_kelamin()+c;
 		try{
-			 status = 0;
-			 pesan = "Data Berhasil di Simpan !";
+			status = 0;
+			pesan = "Data Berhasil di Simpan !";
 			result.setNo_Va(no_va);
 			result.setNo_validasi(masterdata.getNo_validasi());
 			result.setNama_jamaah(masterdata.getNama_jamaah());
-//			message.setStatus(status);
-//			message.setMessage(pesan);
-//			message.setResult(result);
 			masterdata.setNo_va(no_va);
 			masterdataRepo.save(masterdata);
+			rjthRepo.save(DataRjth);
+			
 		}catch (Exception e) {
 			status = 69;
 			 pesan = "Data Gagal di Simpan !";
 			String no_Va = "empty";
-			//message.setNo_Va(no_va);
-//			message.setNo_validasi(masterdata.getNo_validasi());
-//			message.setNama_jamaah(masterdata.getNama_jamaah());
-//			message.setStatus(status);
-//			message.setMessage(pesan);
+			String no_va1 = "0";
+			result.setNo_Va(no_va1);
+			result.setNo_validasi(masterdata.getNo_validasi());
+			result.setNama_jamaah(masterdata.getNama_jamaah());
 		}
 		return new notifikasi<>(status, pesan, result);
 	}
