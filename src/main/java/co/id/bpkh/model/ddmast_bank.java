@@ -12,15 +12,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "DD_MAST_BANK")
 @EntityListeners(AuditingEntityListener.class)
-public class rjth {
+public class ddmast_bank {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	
 	private int id;
 	private String kode_bank;
 	private String nama_bank;
-//	private String total;
-//	private String giro;
 	private String deposito;
 	public int getId() {
 		return id;
@@ -40,24 +38,13 @@ public class rjth {
 	public void setNama_bank(String nama_bank) {
 		this.nama_bank = nama_bank;
 	}
-//	public String getTotal() {
-//		return total;
-//	}
-//	public void setTotal(String total) {
-//		this.total = total;
-//	}
-//	public String getGiro() {
-//		return giro;
-//	}
-//	public void setGiro(String giro) {
-//		this.giro = giro;
-//	}
 	public String getDeposito() {
 		return deposito;
 	}
 	public void setDeposito(String deposito) {
 		this.deposito = deposito;
 	}
+
 	
 	
 	

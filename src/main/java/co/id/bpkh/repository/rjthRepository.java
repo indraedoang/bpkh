@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import co.id.bpkh.model.rjth;
 
 public interface rjthRepository extends JpaRepository<rjth,Long>{
-	@Query(value="select total from DD_MAST_BANK where kode_bank = ?1  ",nativeQuery = true)
+	@Query(value="select deposito from DD_MAST_BANK where kode_bank = ?1  ",nativeQuery = true)
 	 String totalUang(String kode_bank);
 	
 	@Query(value="select id from DD_MAST_BANK where kode_bank = ?1  ",nativeQuery = true)
